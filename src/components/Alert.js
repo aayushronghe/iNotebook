@@ -1,13 +1,13 @@
 import React from "react";
 
-const Alert = (props) => {
+export default function Alert(props) {
   return (
-    <div>
-      <div className="alert alert-primary" role="alert">
-        {props.message}
+    <div style={{height:'50px'}}>
+    {props.alert && <div>
+     <div className={`alert alert-${props.alert.type} alert-dismissible fade show`} role="alert">
+        <strong>{props.alert.type.charAt(0).toUpperCase() + props.alert.type.slice(1)}</strong> : {props.alert.msg}
       </div>
+    </div>}
     </div>
   );
-};
-
-export default Alert;
+}

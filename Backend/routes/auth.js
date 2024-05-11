@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 var fetchuser=require("../middleware/fetchuser")
 
-const JWT_SECRET = "Harryisagood$oy";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 //Create new User
 
@@ -20,6 +20,7 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let success=false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -29,6 +30,7 @@ router.post(
       if (user) {
         return res.status(400).json({ error: "User already exists" });
       }
+      
       const salt = await bcrypt.genSalt(10);
       const secPass = await bcrypt.hash(req.body.password, salt);
       user = await User.create({
@@ -41,8 +43,9 @@ router.post(
           id: user.id,
         },
       };
+      success=true;
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json({ authToken });
+      res.json({ success,authToken });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Something went wrong");
@@ -57,6 +60,7 @@ router.post(
     body("password", "Password cannot be blank").exists(),
   ],
   async (req, res) => {
+    let success=false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -67,15 +71,17 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
+        success=false
         return res
           .status(500)
-          .json({ error: "Please try to login using correct credentials" });
+          .json({ success,error: "Please try to login using correct credentials" });
       }
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
+        success=false
         return res
           .status(500)
-          .json({ error: "Please try to login using correct credentials" });
+          .json({ success,error: "Please try to login using correct credentials" });
       }
       const data = {
         user: {
@@ -83,7 +89,8 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json({ authToken });
+      success=true
+      res.json({ success,authToken });
     } catch (error) 
     {
         console.error(err.message);
@@ -96,7 +103,7 @@ router.post(
     "/getuser",fetchuser,
     async (req, res) => {
         try {
-            userId=req.user.id;
+            const userId=req.user.id;
             const user=await User.findById(userId).select("-password")
             res.send(user)
         } catch (error) {

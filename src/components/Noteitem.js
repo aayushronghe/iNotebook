@@ -4,7 +4,7 @@ import noteContext from "../context/notes/NoteContext";
 const Noteitem = (props) => {
   const { note,updateNote } = props;
   const context = useContext(noteContext);
-  const {deleteNote,editNote}=context;
+  const {deleteNote}=context;
 
   return (
     <div className="col-md-4 my-3">
@@ -21,7 +21,7 @@ const Noteitem = (props) => {
               justifyContent: "space-around",
             }}
           >
-            <i className="fa-solid fa-trash fa-xl" onClick={()=>{deleteNote(note._id)}}></i>
+            <i className="fa-solid fa-trash fa-xl" onClick={()=>{deleteNote(note._id);props.showAlert("Note deleted successfully","success")}}></i>
             <i className="fa-solid fa-pen-to-square fa-xl" onClick={()=>{updateNote(note)}}></i>
           </div>
         </div>
