@@ -29,7 +29,7 @@ const Signup = (props) => {
     });
 
     const json = await response.json();
-    console.log(json);
+    // console.log(json);
     if (json.success && credentials.password === credentials.cpassword) {
       localStorage.setItem("token", json.authToken);
       history("/");

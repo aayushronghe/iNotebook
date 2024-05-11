@@ -7,9 +7,11 @@ import NoteState from "./context/notes/NoteState";
 import Alert from "./components/Alert";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
+
+  
   const [alert,setAlert]=useState(null);
 
   function showAlert(message,type)

@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 var fetchuser=require("../middleware/fetchuser")
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = "Aayushisagood$oy";
 
 //Create new User
 
