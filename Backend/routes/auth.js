@@ -5,8 +5,9 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 var fetchuser=require("../middleware/fetchuser")
+require('dotenv').config();
 
-const JWT_SECRET = "Aayushisagood$oy";
+const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
 
 //Create new User
 
@@ -93,7 +94,7 @@ router.post(
       res.json({ success,authToken });
     } catch (error) 
     {
-        console.error(err.message);
+        console.error(error.message);
         res.status(500).send("Internal Sever Error");
     }
   }
